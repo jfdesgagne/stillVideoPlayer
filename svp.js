@@ -17,9 +17,8 @@
         NUM_IMAGES = 7,
         MID_IMAGE = Math.ceil(NUM_IMAGES / 2) - 1,
         SIDE_IMAGES = NUM_IMAGES - MID_IMAGE,
-        SMALL = 'small',
-        MEDIUM = 'medium',
-        LARGE = 'large',
+        LOW_RES = 'lowRes',
+        HIGH_RES = 'highRes',
         VIDEO_PATH = 'stills/%NAME%/%SIZE%/%NAME%%INDEX%.jpg';
 
     var SVP = function ($svp) {
@@ -66,16 +65,18 @@
             this.frameIndex = Math.max(0, frameIndex);
             this.pause();
         },
-        setImage: function (imageIndex, frameIndex) {
-            var size = (MID_IMAGE === imageIndex) ? MEDIUM : SMALL;
+        setImage: function (imageIndex, frameIndex, highRes) {
+            var size = (highRes && MID_IMAGE === imageIndex) ? HIGH_RES : LOW_RES;
             this.$images.eq(imageIndex).attr('src', this.getImagePath(size, frameIndex));
         },
         play: function () {
+            this.pause();
             this.playTimer = setInterval($.proxy(this, 'tick'), 1000 / this.options.fps);
         },
         pause: function () {
             clearInterval(this.playTimer);
-            this.render();
+            this.playTimer = 0;
+            this.render(true);
         },
         stop: function () {
             this.pause();
@@ -105,11 +106,11 @@
                 this.next();
             }
         },
-        render: function () {
+        render: function (highRes) {
             if (this.options.videoName) {
                 var that = this;
                 this.$images.each(function (i) {
-                    that.setImage(i, that.frameIndex + i);
+                    that.setImage(i, that.frameIndex + i, highRes);
                 });
             }
         }
