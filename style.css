@@ -1,0 +1,16 @@
+.svp-video {
+    width: 945px;
+    height: 180px;
+    margin: 100px auto 30px auto;
+}
+.svp-image {
+    width: 100px;
+    cursor: pointer;
+}
+.svp-image:nth-child(4) {
+    width: 320px;
+}
+.svp-controls {
+    margin: auto;
+    text-align: center;
+}
